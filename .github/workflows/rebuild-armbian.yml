@@ -1,0 +1,211 @@
+#==========================================================================
+# Description: Build Armbian
+# Copyright (C) 2021 https://github.com/ophub/amlogic-s9xxx-armbian
+#==========================================================================
+
+name: Rebuild armbian
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      armbian_url:
+        description: "Set Armbian file path."
+        required: false
+        default: ""
+      armbian_board:
+        description: "Select device board."
+        required: false
+        default: "xiaobao"
+        type: choice
+        options:
+          - all
+          - fine3399
+          - king3399
+          - sw799
+          - tn3399
+          - tvi3315a
+          - xiaobao
+          - zysj
+      armbian_kernel:
+        description: "Select kernel version."
+        required: false
+        default: "6.6.y"
+        type: choice
+        options:
+          - 5.10.210
+          - 5.10.218
+          - 6.1.81
+          - 6.1.91
+          - 6.6.30
+          - 6.6.32
+      auto_kernel:
+        description: "Auto use the latest kernel."
+        required: false
+        default: true
+        type: boolean
+      kernel_repo:
+        description: "Set the kernel repository."
+        required: false
+        default: "Lemon1151/kernel"
+        type: choice
+        options:
+          - Lemon1151/kernel
+      kernel_usage:
+        description: "Set the tags of the stable kernel."
+        required: false
+        default: "stable"
+        type: choice
+        options:
+          - stable
+          - flippy
+          - dev
+          - beta
+      armbian_fstype:
+        description: "Set armbian rootfs type."
+        required: false
+        default: "ext4"
+        type: choice
+        options:
+          - ext4
+          - btrfs
+      armbian_storage:
+        description: "Select image storage type."
+        required: false
+        default: "save"
+        type: choice
+        options:
+          - save
+          - temp
+      builder_name:
+        description: "Set Armbian builder signature."
+        required: false
+        default: "Lemon1151"
+        type: choice
+        options:
+          - Lemon1151
+          - angel
+
+env:
+  TZ: America/New_York
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    if: ${{ github.event.repository.owner.id }} == ${{ github.event.sender.id }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialization environment
+        id: init
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          docker rmi $(docker images -q) 2>/dev/null
+          [[ -n "${AGENT_TOOLSDIRECTORY}" ]] && sudo rm -rf "${AGENT_TOOLSDIRECTORY}"
+          sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d /usr/local/lib/android 2>/dev/null
+          sudo swapoff -a
+          sudo rm -f /swapfile /mnt/swapfile
+          sudo -E apt-get -y update
+          sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
+          sudo -E apt-get -y install $(curl -fsSL https://is.gd/depend_ubuntu2204_armbian)
+          sudo -E systemctl daemon-reload
+          #sudo -E apt-get -y full-upgrade
+          sudo -E apt-get -y autoremove --purge
+          sudo -E apt-get clean
+          sudo sed -i '/NVM_DIR/d;/skel/d' /root/{.bashrc,.profile}
+          sudo rm -rf ~/{.cargo,.dotnet,.rustup}
+          sudo timedatectl set-timezone "${TZ}"
+          echo "status=success" >> ${GITHUB_OUTPUT}
+
+      - name: Create simulated physical disk
+        run: |
+          mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
+          root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
+          sudo truncate -s "${mnt_size}"G /mnt/mnt.img
+          sudo truncate -s "${root_size}"G /root.img
+          sudo losetup /dev/loop6 /mnt/mnt.img
+          sudo losetup /dev/loop7 /root.img
+          sudo pvcreate /dev/loop6
+          sudo pvcreate /dev/loop7
+          sudo vgcreate github /dev/loop6 /dev/loop7
+          sudo lvcreate -n runner -l 100%FREE github
+          sudo mkfs.xfs /dev/github/runner
+          sudo mkdir -p /builder
+          sudo mount /dev/github/runner /builder
+          sudo chown -R runner.runner /builder
+          df -Th
+
+      - name: Set download address
+        id: down
+        working-directory: /builder
+        run: |
+          # Get the url of the rebuild armbian file
+          armbian_url="${{ inputs.armbian_url }}"
+          if  [[ -z "${armbian_url}" ]]; then
+              armbian_site="https://armbian.tnahosting.net/dl/odroidn2/archive/"
+              armbian_name="Armbian.*jammy.*.img.xz"
+              armbian_file=$(curl -s "${armbian_site}" | grep -oE "${armbian_name}" | head -n 1)
+              if [[ -n "${armbian_file}" ]]; then
+                  armbian_url="${armbian_site}${armbian_file}"
+              else
+                  echo -e "Invalid download path: [ ${armbian_site} ]"
+                  exit 1
+              fi
+          fi
+          echo "ARMBIAN_URL=${armbian_url}" >> ${GITHUB_ENV}
+
+          # Get the release name of the rebuild armbian file
+          set_release=""
+          ARR_RELEASE=("jammy" "focal" "bullseye" "buster" "sid")
+          i=1
+          for r in ${ARR_RELEASE[*]}; do
+              if [[ "${armbian_url}" == *"${r}"* ]]; then
+                  set_release="_${r}"
+                  break
+              fi
+              let i++
+          done
+
+          mkdir -p /builder/build
+          ln -sf /builder/build ${GITHUB_WORKSPACE}/build
+          ln -sf /builder/build /home/runner/work/_actions/Lemon1151/rk33xx-armbian/main/build
+
+          sudo timedatectl set-timezone "${TZ}"
+          echo "build_tag=Armbian${set_release}_${{ inputs.armbian_storage }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
+          echo "status=success" >> ${GITHUB_OUTPUT}
+
+      - name: Rebuild Armbian
+        uses: Lemon1151/rk33xx-armbian@main
+        if: ${{ env.ARMBIAN_URL }} != '' && !cancelled()
+        with:
+          build_target: armbian
+          armbian_path: ${{ env.ARMBIAN_URL }}
+          armbian_board: ${{ inputs.armbian_board }}
+          armbian_kernel: ${{ inputs.armbian_kernel }}
+          auto_kernel: ${{ inputs.auto_kernel }}
+          kernel_repo: ${{ inputs.kernel_repo }}
+          kernel_usage: ${{ inputs.kernel_usage }}
+          armbian_fstype: ${{ inputs.armbian_fstype }}
+          builder_name: ${{ inputs.builder_name }}
+
+      - name: Upload Armbian image to Release
+        uses: ncipollo/release-action@main
+        if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
+        with:
+          tag: ${{ steps.down.outputs.build_tag }}
+          artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
+          allowUpdates: true
+          removeArtifacts: false
+          replacesArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            ### Armbian Image information
+            - Default username: root
+            - Default password: 1234
+            - Install command: armbian-install
+            - Update command: armbian-update
+            ### Armbian Image Verification
+            - sha256sum
