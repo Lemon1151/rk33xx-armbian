@@ -196,7 +196,7 @@ jobs:
           token: ${{ secrets.MY_TOKEN }}
 
       - name: Rebuild Armbian
-        uses: Lemon1151/rk33xx-armbian@main
+        uses: Lemon1151/rk33xx-armbian@master
         if: ${{ steps.clean.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: armbian
