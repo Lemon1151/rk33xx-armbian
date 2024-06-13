@@ -30,6 +30,7 @@ on:
           - king3399
           - sw799
           - tn3399
+          - tpm312
           - tvi3315a
           - xiaobao
           - zysj
@@ -41,9 +42,13 @@ on:
         options:
           - 5.4.y
           - 5.10.y
+          - 5.10.218
           - 5.15.y
+          - 5.15.160
           - 6.1.y
+          - 6.1.92
           - 6.6.y
+          - 6.6.32
           - 6.1.y_6.6.y
           - 6.1.y_5.15.y
           - 5.4.y_5.10.y
@@ -204,7 +209,7 @@ jobs:
           allowUpdates: true
           removeArtifacts: false
           replacesArtifacts: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.MY_TOKEN }}
           body: |
             ### Armbian Image information
             - Default username: root
