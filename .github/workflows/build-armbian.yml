@@ -46,11 +46,12 @@ on:
           - 5.10.218
           - 6.1.y
           - 6.1.81
-          - 6.1.90
           - 6.1.92
+          - 6.1.93
           - 6.6.y
           - 6.6.28
           - 6.6.32
+          - 6.6.33
       auto_kernel:
         description: "Auto use the latest kernel."
         required: false
