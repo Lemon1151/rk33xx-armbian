@@ -12,7 +12,7 @@ on:
       set_release:
         description: "Select OS Release."
         required: false
-        default: "jammy"
+        default: "noble"
         type: choice
         options:
           - jammy
@@ -37,21 +37,21 @@ on:
       armbian_kernel:
         description: "Select kernel version."
         required: false
-        default: "6.6.32"
+        default: "6.6.36"
         type: choice
         options:
           - 5.10.y
           - 5.10.210
-          - 5.10.216
-          - 5.10.218
+          - 5.10.220
+          - 5.10.221
           - 6.1.y
-          - 6.1.81
           - 6.1.92
-          - 6.1.93
+          - 6.1.95
+          - 6.1.96
           - 6.6.y
-          - 6.6.28
-          - 6.6.32
-          - 6.6.33
+          - 6.6.30
+          - 6.6.35
+          - 6.6.36
       auto_kernel:
         description: "Auto use the latest kernel."
         required: false
