@@ -26,6 +26,7 @@ on:
         type: choice
         options:
           - all
+          - fine3399_tpm312_xiaobao_zysj
           - fine3399
           - king3399
           - sw799
