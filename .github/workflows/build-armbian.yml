@@ -53,7 +53,7 @@ on:
           - 6.1.97
           - 6.6.y
           - 6.6.32
-          - 6.6.35
+          - 6.6.36
           - 6.6.37
       auto_kernel:
         description: "Auto use the latest kernel."
