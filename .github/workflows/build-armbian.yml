@@ -26,6 +26,7 @@ on:
         type: choice
         options:
           - all
+          - fine3399_xiaobao
           - fine3399_tpm312_xiaobao_zysj
           - fine3399
           - king3399
@@ -38,7 +39,7 @@ on:
       armbian_kernel:
         description: "Select kernel version."
         required: false
-        default: "6.6.36"
+        default: "6.6.y"
         type: choice
         options:
           - 5.10.y
@@ -50,11 +51,11 @@ on:
           - 6.1.y
           - 6.1.81
           - 6.1.95
-          - 6.1.97
+          - 6.1.98
           - 6.6.y
           - 6.6.32
           - 6.6.36
-          - 6.6.37
+          - 6.6.39
       auto_kernel:
         description: "Auto use the latest kernel."
         required: false
