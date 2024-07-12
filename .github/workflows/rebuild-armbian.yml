@@ -34,12 +34,16 @@ on:
         default: "6.6.y"
         type: choice
         options:
-          - 5.10.210
-          - 5.10.218
-          - 6.1.81
-          - 6.1.91
-          - 6.6.30
-          - 6.6.32
+          - 5.10.y
+          - 5.10.221
+          - 5.15.y
+          - 5.15.162
+          - 5.10.y_5.15.y
+          - 6.1.y
+          - 6.1.98
+          - 6.6.y
+          - 6.6.39
+          - 6.1.y_6.6.y
       auto_kernel:
         description: "Auto use the latest kernel."
         required: false
