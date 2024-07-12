@@ -25,15 +25,16 @@ on:
         default: "all"
         type: choice
         options:
-          - all
-          - fine3399
-          - king3399
-          - sw799
-          - tn3399
-          - tpm312
-          - tvi3315a
-          - xiaobao
-          - zysj
+          - 5.10.y
+          - 5.10.221
+          - 5.15.y
+          - 5.15.162
+          - 5.10.y_5.15.y
+          - 6.1.y
+          - 6.1.98
+          - 6.6.y
+          - 6.6.39
+          - 6.1.y_6.6.y
       armbian_kernel:
         description: "Select kernel version."
         required: false
