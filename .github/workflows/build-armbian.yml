@@ -22,7 +22,7 @@ on:
       armbian_board:
         description: "Select device board."
         required: false
-        default: "fine3399"
+        default: "fine3399_xiaobao"
         type: choice
         options:
           - all
