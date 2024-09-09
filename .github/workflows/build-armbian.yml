@@ -37,6 +37,7 @@ on:
           - tvi3315a
           - xiaobao
           - zysj
+          - sm3399b
       armbian_kernel:
         description: "Select kernel version."
         required: false
