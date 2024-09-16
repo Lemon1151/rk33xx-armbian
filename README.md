@@ -1,5 +1,5 @@
 # 仓库说明 
-仓库代码来源于ophub仓库 https://github.com/ophub/amlogic-s9xxx-armbian ，主要构建rk3399相关设备的固件
+仓库代码来源于[ophub](https://github.com/ophub/amlogic-s9xxx-armbian)仓库，主要构建rk3399相关设备的固件
 
 # Armbian
 
