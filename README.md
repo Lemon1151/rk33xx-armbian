@@ -21,6 +21,7 @@ Armbian（中文名：岸边）系统是基于 Debian/Ubuntu 而构建的专门�
 
 ## 链接
 
+- [ophub](https://github.com/ophub/amlogic-s9xxx-armbian)
 - [armbian](https://github.com/armbian/build)
 - [unifreq](https://github.com/unifreq)
 - [kernel.org](https://kernel.org)
