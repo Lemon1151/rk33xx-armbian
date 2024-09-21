@@ -16,7 +16,7 @@ on:
       armbian_board:
         description: "Select device board."
         required: false
-        default: "xiaobao"
+        default: "tpm312"
         type: choice
         options:
           - all
