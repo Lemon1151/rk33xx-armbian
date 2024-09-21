@@ -20,14 +20,20 @@ on:
         type: choice
         options:
           - all
+          - fine3399_xiaobao
+          - tpm312_zysj
           - fine3399
           - king3399
+          - lubancat-5
+          - rock960
+          - sg2710
           - sw799
           - tn3399
           - tpm312
           - tvi3315a
           - xiaobao
           - zysj
+          - sm3399b
       armbian_kernel:
         description: "Select kernel version."
         required: false
@@ -35,14 +41,16 @@ on:
         type: choice
         options:
           - 5.10.y
-          - 5.10.221
+          - 5.10.160
+          - 5.10.226
           - 5.15.y
-          - 5.15.162
+          - 5.15.167
           - 5.10.y_5.15.y
           - 6.1.y
-          - 6.1.98
+          - 6.1.75
+          - 6.1.111
           - 6.6.y
-          - 6.6.39
+          - 6.6.52
           - 6.1.y_6.6.y
       auto_kernel:
         description: "Auto use the latest kernel."
@@ -63,8 +71,9 @@ on:
         type: choice
         options:
           - stable
+          - rk3588
+          - rk35xx
           - flippy
-          - dev
           - beta
       armbian_fstype:
         description: "Set armbian rootfs type."
