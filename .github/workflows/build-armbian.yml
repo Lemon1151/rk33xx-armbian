@@ -41,6 +41,14 @@ on:
           - xiaobao
           - zysj
           - sm3399b
+      armbian_version:
+        description: 'Select armbian version'
+        default: 'main'
+        required: false 
+        type: choice
+        options: 
+          - main 
+          - v24.08
       armbian_kernel:
         description: "Select kernel version."
         required: false
