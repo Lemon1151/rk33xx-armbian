@@ -174,7 +174,7 @@ jobs:
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
           df -hT ${PWD}
-          git clone -q --single-branch --depth=1 --branch=v24.08 https://github.com/armbian/build.git build
+          git clone -q --single-branch --depth=1 --branch=${{ github.event.inputs.armbian_version }} https://github.com/armbian/build.git build
           ln -sf /builder/build ${GITHUB_WORKSPACE}/build
           ln -sf /builder/build /home/runner/work/_actions/Lemon1151/rk33xx-armbian/main/build
           echo "status=success" >> ${GITHUB_OUTPUT}
