@@ -26,6 +26,7 @@ on:
         type: choice
         options:
           - all
+          - lx-r51
           - fine3399_xiaobao_tpm312
           - fine3399
           - rock960
