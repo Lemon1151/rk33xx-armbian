@@ -62,6 +62,7 @@ on:
           - 6.1.112
           - 6.6.y
           - 6.6.56
+          - 6.6.58
           - 6.1.y_6.6.y
       auto_kernel:
         description: "Auto use the latest kernel."
