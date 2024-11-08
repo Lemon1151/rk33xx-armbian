@@ -37,6 +37,7 @@ on:
           - xiaobao
           - zysj
           - sm3399b
+          - cyber3588-aib
       armbian_version:
         description: 'Select armbian version'
         default: 'main'
