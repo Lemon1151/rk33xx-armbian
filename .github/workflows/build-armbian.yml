@@ -61,10 +61,10 @@ on:
           - 5.10.y_5.15.y
           - 6.1.y
           - 6.1.75
-          - 6.1.118
+          - 6.1.119
           - 6.6.y
           - 6.6.56
-          - 6.6.60
+          - 6.6.63
           - 6.1.y_6.6.y
       auto_kernel:
         description: "Auto use the latest kernel."
