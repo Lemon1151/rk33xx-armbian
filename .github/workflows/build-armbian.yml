@@ -26,10 +26,10 @@ on:
         type: choice
         options:
           - all
-          - lx-r51
           - fine3399_xiaobao_tpm312
           - fine3399
           - fmx1-pro
+          - gea-6319
           - rock960
           - sg2710
           - sw799
