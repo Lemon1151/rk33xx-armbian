@@ -1,0 +1,14 @@
+#!/bin/sh
+
+#IFACE=$1
+PHYTOOL=/usr/sbin/phytool
+test -x ${PHYTOOL} || exit 0
+[ "$IFACE" = "eth0" ] || exit 0
+[ $(${PHYTOOL} print ${IFACE}/0 | /usr/bin/head -1 | /usr/bin/cut -d':' -f3) = "0x001cc916" ] || exit 0
+${PHYTOOL} write ${IFACE}/0/31 0xd04
+if [ $(${PHYTOOL} read ${IFACE}/0/16) != "0x34a" ]; then
+	${PHYTOOL} write ${IFACE}/0/16 0x34a
+fi
+${PHYTOOL} write ${IFACE}/0/31 0 
+
+exit 0
