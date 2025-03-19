@@ -38,6 +38,7 @@ on:
           - zysj
           - sm3399b
           - cyber3588-aib
+          - sv-33a6x
       armbian_version:
         description: 'Select armbian version'
         default: 'main'
